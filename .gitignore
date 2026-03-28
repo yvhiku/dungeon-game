@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+.env
+
+# macOS metadata
+__MACOSX/
+
+# Source/design files not needed at runtime
+*.psd
+*.zip
+
+# Promotional files from asset packs
+COUPON.pdf
+COUPON.png

@@ -1,4 +1,4 @@
-"""Game-wide constants and configuration."""
+
 
 from __future__ import annotations
 
@@ -7,9 +7,9 @@ SCREEN_WIDTH  = 1024
 SCREEN_HEIGHT = 768
 FPS           = 60
 TITLE         = "Dungeon of Shadows"
-ZOOM          = 2       # 2x zoom: game renders at half-res then scales up
+ZOOM          = 2       
 
-# ── Viewport (internal resolution the game world is drawn at) ────────────
+
 VIEW_W = SCREEN_WIDTH  // ZOOM
 VIEW_H = SCREEN_HEIGHT // ZOOM
 
@@ -105,21 +105,21 @@ FLOOR_ENEMY_TYPE = {
 PLAYER_SPRITE = ("knight-hero", "Knight_1")
 
 # ── Dungeon generation ──────────────────────────────────────────────────
-DUNGEON_WIDTH   = 60
-DUNGEON_HEIGHT  = 45
+DUNGEON_WIDTH   = 50
+DUNGEON_HEIGHT  = 38
 ROOM_MIN_SIZE   = 4
-ROOM_MAX_SIZE   = 10
+ROOM_MAX_SIZE   = 8
 ROOM_PADDING    = 2
 
 BASE_ROOMS      = 5
 ROOMS_PER_FLOOR = 1
-MAX_ROOMS       = 12
+MAX_ROOMS       = 10
 
 ENEMIES_BASE      = 3
 ENEMIES_PER_FLOOR = 1
 
-BOSS_ROOM_W = 16
-BOSS_ROOM_H = 14
+BOSS_ROOM_W = 14
+BOSS_ROOM_H = 12
 
 # ── Floors ───────────────────────────────────────────────────────────────
 TOTAL_FLOORS = 10

@@ -1,4 +1,4 @@
-"""Procedural dungeon generation with rooms and L-shaped corridors."""
+
 
 from __future__ import annotations
 import random
@@ -175,14 +175,14 @@ class DungeonGenerator:
     @staticmethod
     def _h_tunnel(tm: TileMap, x1: int, x2: int, y: int):
         for x in range(min(x1, x2), max(x1, x2) + 1):
-            for dy in (-1, 0, 1):
+            for dy in (0, 1):
                 if 0 <= y + dy < tm.height:
                     tm[x, y + dy] = FLOOR
 
     @staticmethod
     def _v_tunnel(tm: TileMap, y1: int, y2: int, x: int):
         for y in range(min(y1, y2), max(y1, y2) + 1):
-            for dx in (-1, 0, 1):
+            for dx in (0, 1):
                 if 0 <= x + dx < tm.width:
                     tm[x + dx, y] = FLOOR
 

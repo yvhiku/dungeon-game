@@ -219,7 +219,13 @@ class UIManager:
         eq_y += 20
 
         if len(inv) == 0:
-            surface.blit(self.font_sm.render("(empty)", True, COLOR_UI_DIM), (px + 30, eq_y))
+            empty_y = eq_y + 30
+            msg = self.font_md.render("Inventory is empty", True, COLOR_UI_DIM)
+            surface.blit(msg, (px + (panel_w - msg.get_width()) // 2, empty_y))
+            hint2 = self.font_sm.render("Defeat enemies to get loot!", True, COLOR_UI_DIM)
+            surface.blit(hint2, (px + (panel_w - hint2.get_width()) // 2, empty_y + 28))
+            hint3 = self.font_sm.render("[F] to pick up nearby items", True, COLOR_UI_DIM)
+            surface.blit(hint3, (px + (panel_w - hint3.get_width()) // 2, empty_y + 48))
         else:
             for i, item in enumerate(inv.items):
                 color = self._item_color(item.item_type)
@@ -241,9 +247,12 @@ class UIManager:
             desc = self.font_sm.render(sel.description, True, COLOR_UI_TEXT)
             surface.blit(desc, (px + 20, bottom_y + 8))
             hint = "[E] Equip/Use  [X] Drop  [Up/Down] Navigate"
-        else:
+        elif len(inv) > 0:
             hint = "[Up/Down] Navigate"
-        surface.blit(self.font_sm.render(hint, True, COLOR_UI_DIM), (px + 20, bottom_y + 30))
+        else:
+            hint = ""
+        if hint:
+            surface.blit(self.font_sm.render(hint, True, COLOR_UI_DIM), (px + 20, bottom_y + 30))
         surface.blit(self.font_sm.render("[I] Close", True, COLOR_UI_DIM), (px + 20, bottom_y + 48))
 
     # ── floating messages ────────────────────────────────────────────────

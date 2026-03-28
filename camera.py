@@ -1,4 +1,4 @@
-"""Camera that follows the player and clamps to dungeon bounds."""
+
 
 from __future__ import annotations
 from config import VIEW_W, VIEW_H

@@ -106,9 +106,11 @@ class Player:
         dist = math.hypot(ex - self.x, ey - self.y)
         if dist > ATTACK_RANGE + eradius:
             return False
+        if dist < self.radius + eradius + 8:
+            return True
         angle_to = math.atan2(ey - self.y, ex - self.x)
         diff = (angle_to - self.facing + math.pi) % (2 * math.pi) - math.pi
-        return abs(diff) < math.pi / 2  # 180° frontal arc
+        return abs(diff) < math.pi / 2
 
     # ── damage ───────────────────────────────────────────────────────────
 

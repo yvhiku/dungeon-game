@@ -13,6 +13,7 @@ from config import (
     COLOR_STAIRS, COLOR_BLACK,
     AUTO_PICKUP_RANGE, MANUAL_PICKUP_RANGE,
     FLOOR_ENEMY_TYPE,
+    DUNGEON_WIDTH, DUNGEON_HEIGHT,
 )
 from dungeon import DungeonGenerator, TileMap
 from player import Player
@@ -275,12 +276,15 @@ class Game:
 
     def _update(self, dt_ms: int):
         if not self.player.alive:
+            self.ui.show_inventory = False
             self.state = "game_over"
             return
 
+        if self.ui.show_inventory:
+            return
+
         keys = pygame.key.get_pressed()
-        if not self.ui.show_inventory:
-            self.player.handle_input(keys, self.tilemap)
+        self.player.handle_input(keys, self.tilemap)
         self.player.update(dt_ms)
 
         for enemy in self.enemies:
@@ -314,6 +318,9 @@ class Game:
         scaled = pygame.transform.scale(gs, (SCREEN_WIDTH, SCREEN_HEIGHT))
         self.screen.blit(scaled, (0, 0))
 
+        if self.tilemap and self.state == "playing":
+            self._draw_minimap(self.screen)
+
         alive_count = sum(1 for e in self.enemies if e.alive)
         self.ui.draw(self.screen, self.player, self.floor, alive_count)
 
@@ -323,6 +330,60 @@ class Game:
             self.ui.draw_victory(self.screen)
         elif self.state == "controls":
             self.ui.draw_controls(self.screen)
+
+    def _draw_minimap(self, surf: pygame.Surface):
+        tm = self.tilemap
+        px_scale = 4
+        pad = 4
+        mw = tm.width * px_scale
+        mh = tm.height * px_scale
+        border = 2
+
+        ox = SCREEN_WIDTH - mw - pad - border * 2
+        oy = pad
+
+        bg = pygame.Surface((mw + border * 2, mh + border * 2), pygame.SRCALPHA)
+        bg.fill((0, 0, 0, 180))
+        surf.blit(bg, (ox, oy))
+
+        map_ox = ox + border
+        map_oy = oy + border
+
+        for ty in range(tm.height):
+            for tx in range(tm.width):
+                tile = tm[tx, ty]
+                if tile == WALL:
+                    continue
+                x = map_ox + tx * px_scale
+                y = map_oy + ty * px_scale
+                if tile == STAIRS:
+                    col = (50, 200, 100)
+                else:
+                    col = (60, 60, 75)
+                pygame.draw.rect(surf, col, (x, y, px_scale, px_scale))
+
+        sx, sy = self.stairs_tile
+        stair_x = map_ox + sx * px_scale
+        stair_y = map_oy + sy * px_scale
+        alive_count = sum(1 for e in self.enemies if e.alive)
+        stair_col = (50, 220, 100) if alive_count == 0 else (80, 80, 80)
+        pygame.draw.rect(surf, stair_col, (stair_x - 1, stair_y - 1,
+                                           px_scale + 2, px_scale + 2))
+
+        for enemy in self.enemies:
+            if not enemy.alive:
+                continue
+            ex = map_ox + int(enemy.x / TILE_SIZE) * px_scale
+            ey = map_oy + int(enemy.y / TILE_SIZE) * px_scale
+            col = (220, 50, 60) if not isinstance(enemy, Boss) else (200, 50, 230)
+            pygame.draw.rect(surf, col, (ex, ey, px_scale, px_scale))
+
+        ptx = int(self.player.x / TILE_SIZE)
+        pty = int(self.player.y / TILE_SIZE)
+        px = map_ox + ptx * px_scale
+        py = map_oy + pty * px_scale
+        pygame.draw.rect(surf, (70, 180, 255), (px - 1, py - 1,
+                                                px_scale + 2, px_scale + 2))
 
     def _draw_tilemap(self, surf: pygame.Surface):
         cam = self.camera

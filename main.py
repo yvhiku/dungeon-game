@@ -1,13 +1,4 @@
-"""
-Dungeon of Shadows — a 2D roguelike dungeon crawler.
 
-Run:
-    python lab4.py              # launch the game
-    python lab4.py --seed 42    # deterministic dungeon
-
-Requirements:
-    pip install pygame-ce       # (or: pip install pygame)
-"""
 
 from __future__ import annotations
 import argparse
